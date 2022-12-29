@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Libre+Barcode+39&family=Press+Start+2P&family=Share+Tech+Mono&display=swap");
+@font-face {
+  font-family: "Digital";
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot");
+  src: url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/8e22783d707ad140bffe18b2a3812529.svg#Digital-7")
+      format("svg");
+}
+* {
+  box-sizing: border-box;
+  font-family: "Share Tech Mono", monospace;
+  font-size: 2rem;
+}
+:root {
+  margin: 0;
+  font-size: 62.5%;
+}
+body {
+  margin: 0;
+  font-family: "Share Tech Mono", monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #cacad6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  user-select: none;
+}
+.calculator {
+  background-color: black;
+  padding: 0.7rem;
+  color: white;
+  width: 32rem;
+  border: 2px solid #47476b;
+
+  display: grid;
+  grid-template-areas:
+    "formula formula formula formula"
+    "display display display display"
+    "clear clear divide multiply"
+    "seven eight nine subtract"
+    "four five six add"
+    "one two three equals"
+    "zero zero decimal equals";
+}
+.key {
+  background-color: #4d4d4d;
+  color: white;
+  border-radius: 0;
+  min-height: 6.5rem;
+  border: 1px solid black;
+}
+.key:hover {
+  color: black;
+  outline: 0.05em solid grey;
+  z-index: 3;
+}
+.formula {
+  grid-area: formula;
+  text-align: right;
+  font-family: Digital, monospace;
+  font-size: 2rem;
+  color: orange;
+  word-wrap: break-word;
+  min-height: 2.5rem;
+}
+.display {
+  grid-area: display;
+  text-align: right;
+  font-family: Digital, monospace;
+  font-size: 3rem;
+  min-height: 3.5rem;
+}
+.operator {
+  background-color: #666666;
+}
+.clear {
+  background-color: #ac3939;
+}
+.equals {
+  background-color: #046;
+}
+#zero {
+  grid-area: zero;
+}
+#one {
+  grid-area: one;
+}
+#two {
+  grid-area: two;
+}
+#three {
+  grid-area: three;
+}
+#four {
+  grid-area: four;
+}
+#five {
+  grid-area: five;
+}
+#six {
+  grid-area: six;
+}
+#seven {
+  grid-area: seven;
+}
+#eight {
+  grid-area: eight;
+}
+#nine {
+  grid-area: nine;
+}
+#decimal {
+  grid-area: decimal;
+}
+#add {
+  grid-area: add;
+}
+#subtract {
+  grid-area: subtract;
+}
+#divide {
+  grid-area: divide;
+}
+#multiply {
+  grid-area: multiply;
+}
+#clear {
+  grid-area: clear;
+}
+#equals {
+  grid-area: equals;
+}

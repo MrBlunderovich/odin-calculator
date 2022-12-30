@@ -1,4 +1,4 @@
-let display = 0;
+let display = "0";
 let formula = "";
 const keypad = [
   { value: "0", id: "zero", label: "0", type: "digit" },
@@ -30,7 +30,7 @@ for (let index = 0; index < keypad.length; index++) {
   button.id = key.id;
   button.dataset.index = index;
   button.classList.add("key", key.type);
-  button.dataset.key = key.id; //duplicates button.id for no reason?
+  //button.dataset.key = key.id; //duplicates button.id for no reason?
   button.onclick = handleClick;
   calculator.appendChild(button);
 }
@@ -48,6 +48,8 @@ function calculate(frml) {
 function clear() {
   display = "0";
   formula = "";
+  displayDiv.textContent = display;
+  formulaDiv.textContent = formula;
 }
 
 function setDisplay(newValue) {
@@ -79,9 +81,9 @@ function handleClick(event) {
         display === "*" ||
         formula.includes("=")
       ) {
-        display = keypad[buttonIndex].value;
+        setDisplay(keypad[buttonIndex].value);
       } else {
-        display += keypad[buttonIndex].value;
+        setDisplay(display + keypad[buttonIndex].value);
       }
       if (formula && formula.includes("=")) {
         formula = "";
@@ -89,10 +91,9 @@ function handleClick(event) {
       break;
     case 10: //point dot decimal
       if (!formula) {
-        display = "0.";
+        setDisplay("0.");
       } else if (formula.includes("=")) {
         clear();
-        display = "0.";
       } else if (display.toString().includes(".")) {
         break;
       } else if (
@@ -101,13 +102,13 @@ function handleClick(event) {
         display === "/" ||
         display === "*"
       ) {
-        display = "0.";
+        setDisplay("0.");
       } else {
-        display += ".";
+        setDisplay(display + ".");
       }
       break;
     case 12: // minus
-      display = keypad[buttonIndex].value; //'-'
+      setDisplay(keypad[buttonIndex].value); //'-'
       break;
     case 11:
     case 13:
@@ -126,13 +127,13 @@ function handleClick(event) {
           formula.slice(-2, formula.length) === "/-"
         ) {
           formula = formula.slice(0, -2);
-          display = keypad[buttonIndex].value;
+          setDisplay(keypad[buttonIndex].value);
         } else if (display !== keypad[buttonIndex].value) {
           formula = formula.slice(0, -1);
-          display = keypad[buttonIndex].value;
+          setDisplay(keypad[buttonIndex].value);
         }
       } else {
-        display = keypad[buttonIndex].value;
+        setDisplay(keypad[buttonIndex].value);
       }
       break;
     case 15: //clear
@@ -141,7 +142,7 @@ function handleClick(event) {
     case 16: //equals
       const result = calculate(formula);
       formula += keypad[buttonIndex].value;
-      display = result;
+      setDisplay(result);
       break;
     default:
       break;
@@ -150,15 +151,15 @@ function handleClick(event) {
 
 function updateFormula() {
   if (display === "0." || formula.slice(-1) === "=") {
-    setFormula((prevFormula) => prevFormula + display); //initial or result
+    formula = formula + display; //initial or result
   } else if (formula === "" && display === "0") {
-    setFormula("");
+    formula = "";
   } else if (formula.includes("=")) {
     //new expression from previous result
-    setFormula(
-      (prevFormula) => prevFormula.slice(prevFormula.indexOf("=") + 1) + display
-    );
+    formula = formula.slice(formula.indexOf("=") + 1) + display;
   } else {
-    setFormula((prevFormula) => prevFormula + display.slice(-1));
+    formula = formula + display.slice(-1);
   }
+  displayDiv.textContent = display;
+  formulaDiv.textContent = formula;
 }

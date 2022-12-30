@@ -6,7 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Odin Calculator</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="index.js"></script>
+    <script src="index.js" defer></script>
   </head>
-  <body></body>
+  <body>
+    <div class="calculator">
+      <div id="formula" class="formula">
+        <!-- {formula} -->
+      </div>
+      <div id="display" class="display">
+        <!-- {display} -->
+      </div>
+      <div id="keypad-container"></div>
+      <!-- {keypad.map((item, index) => (
+          <button
+            id={item.id}
+            index={index}
+            class={`key ${item.type}`}
+            key={item.id}
+            onClick={handleClick}
+          >
+            {item.label}
+          </button>
+        ))} -->
+    </div>
+  </body>
 </html>

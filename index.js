@@ -20,6 +20,24 @@ const keypad = [
   { value: "=", id: "equals", label: "=", type: "equals" },
 ];
 const calculator = document.querySelector(".calculator");
+const formulaDiv = document.querySelector("#formula");
+const displayDiv = document.querySelector("#display");
+
+for (let index = 0; index < keypad.length; index++) {
+  const key = keypad[index];
+  const button = document.createElement("button");
+  button.textContent = key.label;
+  button.id = key.id;
+  button.dataset.index = index;
+  button.classList.add("key", key.type);
+  button.dataset.key = key.id; //duplicates button.id for no reason?
+  button.onclick = handleClick;
+  calculator.appendChild(button);
+}
+
+/////////initialization
+displayDiv.textContent = display;
+formulaDiv.textContent = formula;
 
 function calculate(frml) {
   const str = frml.replace(/[^-\d/*+.]/g, "");
@@ -32,16 +50,9 @@ function clear() {
   formula = "";
 }
 
-for (let index = 0; index < keypad.length; index++) {
-  const key = keypad[index];
-  const button = document.createElement("button");
-  button.textContent = key.label;
-  button.id = key.id;
-  button.dataset.index = index;
-  button.classList.add("key", key.type);
-  button.dataset.key = key.id; //duplicates button.id for no reason?
-  button.onclick = handleClick;
-  calculator.appendChild(button);
+function setDisplay(newValue) {
+  display = newValue;
+  updateFormula();
 }
 
 function handleClick(event) {
@@ -134,5 +145,20 @@ function handleClick(event) {
       break;
     default:
       break;
+  }
+}
+
+function updateFormula() {
+  if (display === "0." || formula.slice(-1) === "=") {
+    setFormula((prevFormula) => prevFormula + display); //initial or result
+  } else if (formula === "" && display === "0") {
+    setFormula("");
+  } else if (formula.includes("=")) {
+    //new expression from previous result
+    setFormula(
+      (prevFormula) => prevFormula.slice(prevFormula.indexOf("=") + 1) + display
+    );
+  } else {
+    setFormula((prevFormula) => prevFormula + display.slice(-1));
   }
 }

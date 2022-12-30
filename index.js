@@ -1,5 +1,5 @@
-//import { createElement } from "react";
-
+let display = 0;
+let formula = "";
 const keypad = [
   { value: "0", id: "zero", label: "0", type: "digit" },
   { value: "1", id: "one", label: "1", type: "digit" },
@@ -21,32 +21,118 @@ const keypad = [
 ];
 const calculator = document.querySelector(".calculator");
 
-function handleClick(event) {
-  //
+function calculate(frml) {
+  const str = frml.replace(/[^-\d/*+.]/g, "");
+  const n = eval(str) * 10000 * (1 + Number.EPSILON);
+  return Math.round(n) / 10000;
 }
-/* const buttons = keypad
-  .map((item, index) => {
-    //check index=${index} prop
-    return `<button
-        id="${item.id}"
-        index="${index}"
-        class="${`key ${item.type}`}"
-        key="${item.id}"
-        onClick="handleClick"
-        >
-        ${item.label}
-        </button>`;
-  })
-  .join("");
-calculator.innerHTML = buttons; */
+
+function clear() {
+  display = "0";
+  formula = "";
+}
+
 for (let index = 0; index < keypad.length; index++) {
   const key = keypad[index];
   const button = document.createElement("button");
   button.textContent = key.label;
   button.id = key.id;
-  button.index = index;
+  button.dataset.index = index;
   button.classList.add("key", key.type);
   button.dataset.key = key.id; //duplicates button.id for no reason?
   button.onclick = handleClick;
   calculator.appendChild(button);
+}
+
+function handleClick(event) {
+  //event.target.attributes.index.value returns a string.
+  //unary plus '+' converts it to Number
+  const buttonIndex = +event.target.dataset.index;
+  console.log(`button index: ${buttonIndex}`);
+  switch (buttonIndex) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+      if (
+        display === "0" ||
+        display === "+" ||
+        display === "-" ||
+        display === "/" ||
+        display === "*" ||
+        formula.includes("=")
+      ) {
+        display = keypad[buttonIndex].value;
+      } else {
+        display += keypad[buttonIndex].value;
+      }
+      if (formula && formula.includes("=")) {
+        formula = "";
+      }
+      break;
+    case 10: //point dot decimal
+      if (!formula) {
+        display = "0.";
+      } else if (formula.includes("=")) {
+        clear();
+        display = "0.";
+      } else if (display.toString().includes(".")) {
+        break;
+      } else if (
+        display === "+" ||
+        display === "-" ||
+        display === "/" ||
+        display === "*"
+      ) {
+        display = "0.";
+      } else {
+        display += ".";
+      }
+      break;
+    case 12: // minus
+      display = keypad[buttonIndex].value; //'-'
+      break;
+    case 11:
+    case 13:
+    case 14: // + / * operators
+      if (formula === "" || formula === "-") {
+        break;
+      } else if (
+        display === "+" ||
+        display === "-" ||
+        display === "/" ||
+        display === "*"
+      ) {
+        if (
+          formula.slice(-2, formula.length) === "+-" ||
+          formula.slice(-2, formula.length) === "*-" ||
+          formula.slice(-2, formula.length) === "/-"
+        ) {
+          formula = formula.slice(0, -2);
+          display = keypad[buttonIndex].value;
+        } else if (display !== keypad[buttonIndex].value) {
+          formula = formula.slice(0, -1);
+          display = keypad[buttonIndex].value;
+        }
+      } else {
+        display = keypad[buttonIndex].value;
+      }
+      break;
+    case 15: //clear
+      clear();
+      break;
+    case 16: //equals
+      const result = calculate(formula);
+      formula += keypad[buttonIndex].value;
+      display = result;
+      break;
+    default:
+      break;
+  }
 }

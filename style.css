@@ -70,7 +70,9 @@ body {
   font-size: 2rem;
   color: orange;
   word-wrap: break-word;
+  line-height: 2rem;
   min-height: 2.5rem;
+  overflow: hidden;
 }
 .display {
   grid-area: display;
@@ -78,6 +80,7 @@ body {
   font-family: Digital, monospace;
   font-size: 3rem;
   min-height: 3.5rem;
+  overflow: hidden;
 }
 .operator {
   background-color: #666666;

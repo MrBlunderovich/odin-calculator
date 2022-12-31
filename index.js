@@ -103,6 +103,9 @@ function handleClick(event) {
         display === "*" ||
         formula.includes("=")
       ) {
+        if (formula && formula.includes("=")) {
+          formula = "";
+        }
         setDisplay(keypad[buttonIndex].value);
       } else {
         setDisplay(display + keypad[buttonIndex].value);

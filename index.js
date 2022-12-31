@@ -40,9 +40,33 @@ displayDiv.textContent = display;
 formulaDiv.textContent = formula;
 
 function calculate(frml) {
-  const str = frml.replace(/[^-\d/*+.]/g, "");
-  const n = eval(str) * 10000 * (1 + Number.EPSILON);
-  return Math.round(n) / 10000;
+  function compute(first, operator, second) {
+    switch (operator) {
+      case "+":
+        return +first + +second;
+      case "-":
+        return +first - +second;
+      case "*":
+        return +first * +second;
+      case "/":
+        return +first / +second;
+      default:
+        return "ERROR";
+    }
+  }
+  const firstNumberRegex = /^-*\d+\.*\d*/;
+  const operationRegex = /^([\+\-\*\/])(-*\d+\.*\d*)/;
+  let firstNumber = frml.match(firstNumberRegex);
+  if (firstNumber) {
+    frml = frml.slice(firstNumber[0].length);
+    while (frml.match(operationRegex)) {
+      const operation = frml.match(operationRegex);
+      firstNumber = compute(firstNumber, operation[1], operation[2]);
+      frml = frml.slice((operation[1] + operation[2]).length);
+    }
+  }
+  const n = firstNumber * 1000 * (1 + Number.EPSILON);
+  return Math.round(n) / 1000;
 }
 
 function clear() {
@@ -58,8 +82,6 @@ function setDisplay(newValue) {
 }
 
 function handleClick(event) {
-  //event.target.attributes.index.value returns a string.
-  //unary plus '+' converts it to Number
   const buttonIndex = +event.target.dataset.index;
   console.log(`button index: ${buttonIndex}`);
   switch (buttonIndex) {
